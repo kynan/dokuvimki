@@ -217,4 +217,4 @@ if main_syntax == 'dokuwiki'
   unlet main_syntax
 endif
 
-" vim:ts=2:sw=2:et:enc=utf-8:
+" vim:ts=2:sw=2:et:
