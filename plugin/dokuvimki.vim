@@ -66,8 +66,6 @@ if has('python') && version > 700
       return res
     endif
   endfun
-  set completefunc=InsertModeComplete
-  set omnifunc=InsertModeComplete
 
   " Custom autocompletion function for namespaces and pages in
   " normal mode. Used with DWedit
@@ -999,6 +997,8 @@ class DokuVimKi:
         vim.command('setlocal expandtab')
         vim.command('setlocal shiftwidth=2')
         vim.command('setlocal encoding=utf-8')
+        vim.command('setlocal completefunc=InsertModeComplete')
+        vim.command('setlocal omnifunc=InsertModeComplete')
         vim.command('map <buffer> <silent> e :py dokuvimki.id_lookup()<CR>')
         vim.command('imap <buffer> <silent> <C-D><C-B> ****<ESC>1hi')
         vim.command('imap <buffer> <silent> <C-D><C-I> ////<ESC>1hi')
