@@ -999,7 +999,7 @@ class DokuVimKi:
         vim.command('setlocal encoding=utf-8')
         vim.command('setlocal completefunc=InsertModeComplete')
         vim.command('setlocal omnifunc=InsertModeComplete')
-        vim.command('map <buffer> <silent> e :py dokuvimki.id_lookup()<CR>')
+        vim.command('map <buffer> <silent> <C-]> :py dokuvimki.id_lookup()<CR>')
         vim.command('imap <buffer> <silent> <C-D><C-B> ****<ESC>1hi')
         vim.command('imap <buffer> <silent> <C-D><C-I> ////<ESC>1hi')
         vim.command('imap <buffer> <silent> <C-D><C-U> ____<ESC>1hi')
