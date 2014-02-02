@@ -748,8 +748,6 @@ class DokuVimKi:
         vim.command('silent! buffer! ' + self.buffers['help'].num)
         vim.command('silent! set buftype=help')
 
-        # generate help tags just in case 
-        vim.command('helptags ~/.vim/doc')
         vim.command('help dokuvimki')
         vim.command("setlocal statusline=%{'[help]'}")
 
@@ -1036,8 +1034,7 @@ class Buffer:
         """
         vim.command('badd ' + name)
         self.num  = vim.eval('bufnr("' + name + '")')
-        self.id   = int(self.num) - 1
-        self.buf  = vim.buffers[self.id]
+        self.buf  = vim.buffers[int(self.num)]
         self.name = name
         self.iswp = iswp
         self.type = type
