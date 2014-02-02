@@ -114,7 +114,7 @@ except ImportError:
     print >>sys.stderr, 'DokuVimKi Error: The dokuwikixmlrpc python module is missing!'
     has_dokuwikixmlrpc = False
 
-
+vim_version = int(vim.eval('v:version'))
 
 class DokuVimKi:
     """
@@ -1034,7 +1034,13 @@ class Buffer:
         """
         vim.command('badd ' + name)
         self.num  = vim.eval('bufnr("' + name + '")')
-        self.id   = int(self.num) - 1
+
+        # buffers are numbered from 0 in vim 7.3 and older
+        # and from 1 in vim 7.4 and newer
+        self.id = int(self.num)
+        if vim_version < 704:
+            self.id -= 1
+
         self.buf  = vim.buffers[self.id]
         self.name = name
         self.iswp = iswp
