@@ -748,8 +748,6 @@ class DokuVimKi:
         vim.command('silent! buffer! ' + self.buffers['help'].num)
         vim.command('silent! set buftype=help')
 
-        # generate help tags just in case 
-        vim.command('helptags ~/.vim/doc')
         vim.command('help dokuvimki')
         vim.command("setlocal statusline=%{'[help]'}")
 
