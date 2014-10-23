@@ -211,10 +211,8 @@ class DokuVimKi:
         editing or switches to the correct buffer if the is open already.
         """
 
-        wp = wp.strip()
-        if wp.find(' ') != -1:
-            print >>sys.stderr, "Pagenames cannot contain whitespace. Please use valid pagenames only!\nSee http://dokuwiki.org/pagename" 
-            return
+        print >>sys.stdout, "editing pagename %s." % wp
+        wp = ':'.join([x.strip().lower().replace(' ', '_') for x in wp.split(':')])
 
         if self.diffmode:
             self.diff_close()
@@ -836,7 +834,7 @@ class DokuVimKi:
 
         result = self.set_locks(locks)
 
-        if locks['lock'] == result['locked']:
+        if locks['lock'] == [x.encode('utf-8') for x in result['locked']]:
             print >>sys.stdout, "Locked page %s for editing." % wp
             return True
         else:
@@ -854,7 +852,10 @@ class DokuVimKi:
         locks['unlock'] = [ wp ]
 
         result = self.set_locks(locks)
-        if locks['unlock'] == result['unlocked']:
+        """
+        FIXME UnicodeWarning: Unicode equal comparison failed to convert both arguments to unicode
+        """
+        if locks['unlock'] == [x.encode('utf-8') for x in result['unlocked']]:
             return True
         else:
             return False
