@@ -852,9 +852,7 @@ class DokuVimKi:
         locks['unlock'] = [ wp ]
 
         result = self.set_locks(locks)
-        """
-        FIXME UnicodeWarning: Unicode equal comparison failed to convert both arguments to unicode
-        """
+
         if locks['unlock'] == [x.encode('utf-8') for x in result['unlocked']]:
             return True
         else:
