@@ -1,23 +1,26 @@
 # Description
 
 DokuVimKi is a [Vim](http://vim.org) plugin which allows you to edit
-[DokuWiki](http://dokuwiki.org) pages of DokuWikis
+[DokuWiki](http://dokuwiki.org) pages via DokuWikis
 [XML-RPC](http://www.dokuwiki.org/devel:xmlrpc) interface. It also does syntax
 highlighting for DokuWiki syntax.
 
 # Installation
 
 Just download it and unpack it in `~/.vim/`. You also have to make sure that
-vim is compiled with python support (should be the case for most
-distributions) and that you have the `xmlrpclib` and `dokuwikixmlrpc` python
-modules installed. You'll also have to install a recent development version of
+vim is compiled with [python
+support](http://vimdoc.sourceforge.net/htmldoc/if_pyth.html) (should be the
+case for most distributions e.g. `vim-gnome` or `vim-gtk` on Debian/Ubuntu)
+and that you have the `xmlrpclib` and `dokuwikixmlrpc` python modules
+installed. You'll also have to install a recent development version of
 [DokuWiki](http://dokuwiki.org) itself in order to use this plugin! For
 details on how to setup XMLRPC for DokuWiki please refer to
 [config:xmlrpc](http://www.dokuwiki.org/devel:xmlrpc).
 
 If you want to enable syntax highlighting without issuing `:set
 syntax=dokuwiki` when editing pages of a local wiki just put this in your
-`~/.vimrc` to make VIM auto-detect DokuWiki files:
+`~/.vimrc` to make VIM auto-detect DokuWiki files (this is not required for
+editing remote wikis via `DWedit`):
 
 ```
 " looks for DokuWiki headlines in the first 20 lines
@@ -59,7 +62,7 @@ let g:DokuVimKi_INDEX_WINWIDTH = 40
 let g:DokuVimKi_DEFAULT_SUM = 'fancy default summary'
 ```
 
-Once your set and done you can launch DokuVimKi:
+Once you are set and done you can launch DokuVimKi:
 ```
 :DokuVimKi
 ```
