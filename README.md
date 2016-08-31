@@ -7,8 +7,22 @@ highlighting for DokuWiki syntax.
 
 # Installation
 
-Just download it and unpack it in `~/.vim/`. You also have to make sure that
-vim is compiled with [python
+The recommended way to install DokuVimKi is via a Vim plugin manager like
+[`vim-plug`](https://github.com/junegunn/vim-plug) or
+[`pathogen.vim`](https://github.com/tpope/vim-pathogen).
+
+For `vim-plug`, add the following to the vim-plug section of your `~/.vimrc`,
+which enables the DokuVimKi plugin only when first connecting to a DokuWiki:
+
+    Plug 'kynan/dokuvimki', {'on': 'DokuVimKi'}
+
+For `pathogen.vim`, simply run the following:
+
+    cd ~/.vim/bundle
+    git clone git://github.com/kynan/dokuvimki
+
+Alternatively, just download it and unpack it in `~/.vim/`. You also have to
+make sure that vim is compiled with [python
 support](http://vimdoc.sourceforge.net/htmldoc/if_pyth.html) (should be the
 case for most distributions e.g. `vim-gnome` or `vim-gtk` on Debian/Ubuntu)
 and that you have the `xmlrpclib` and `dokuwikixmlrpc` python modules
