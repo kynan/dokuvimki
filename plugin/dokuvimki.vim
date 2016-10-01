@@ -19,8 +19,14 @@
 " URL:          http://www.chimeric.de/projects/dokuwiki/dokuvimki
 "-----------------------------------------------------------------------------
 
-if has('python') && version > 700
-  command! -nargs=0 DokuVimKi exec('py dokuvimki()')
+if has('python3')
+  command! -nargs=1 Py py3 <args>
+elseif has('python')
+  command! -nargs=1 Py py <args>
+endif
+
+if (has('python3') || has('python')) && version > 700
+  command! -nargs=0 DokuVimKi exec('Py dokuvimki()')
 
   if !exists('g:DokuVimKi_INDEX_WINWIDTH')
     let g:DokuVimKi_INDEX_WINWIDTH=30
@@ -95,7 +101,7 @@ if has('python') && version > 700
     return ''
   endfun
 
-python <<EOF
+Py <<EOF
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
@@ -141,19 +147,19 @@ class DokuVimKi:
 
         if self.xmlrpc_init():
 
-            vim.command("command! -complete=customlist,CmdModeComplete -nargs=1 DWedit exec('py dokuvimki.edit(<f-args>)')")
-            vim.command("command! -complete=customlist,CmdModeComplete -nargs=* DWcd exec('py dokuvimki.cd(<f-args>)')")
-            vim.command("command! -nargs=? DWsave exec('py dokuvimki.save(<f-args>)')")
-            vim.command("command! -nargs=? DWsearch exec('py dokuvimki.search(\"page\", <f-args>)')")
-            vim.command("command! -nargs=? DWmediasearch exec('py dokuvimki.search(\"media\", <f-args>)')")
-            vim.command("command! -complete=customlist,CmdModeComplete -nargs=* DWrevisions exec('py dokuvimki.revisions(<f-args>)')")
-            vim.command("command! -complete=customlist,CmdModeComplete -nargs=? DWbacklinks exec('py dokuvimki.backlinks(<f-args>)')")
-            vim.command("command! -nargs=? DWchanges exec('py dokuvimki.changes(<f-args>)')")
-            vim.command("command! -nargs=0 -bang DWclose exec('py dokuvimki.close(\"<bang>\")')")
-            vim.command("command! -nargs=0 DWdiffclose exec('py dokuvimki.diff_close()')")
-            vim.command("command! -complete=file -bang -nargs=1 DWupload exec('py dokuvimki.upload(<f-args>,\"<bang>\")')")
-            vim.command("command! -nargs=0 DWhelp exec('py dokuvimki.help()')")
-            vim.command("command! -nargs=0 -bang DWquit exec('py dokuvimki.quit(\"<bang>\")')")
+            vim.command("command! -complete=customlist,CmdModeComplete -nargs=1 DWedit exec('Py dokuvimki.edit(<f-args>)')")
+            vim.command("command! -complete=customlist,CmdModeComplete -nargs=* DWcd exec('Py dokuvimki.cd(<f-args>)')")
+            vim.command("command! -nargs=? DWsave exec('Py dokuvimki.save(<f-args>)')")
+            vim.command("command! -nargs=? DWsearch exec('Py dokuvimki.search(\"page\", <f-args>)')")
+            vim.command("command! -nargs=? DWmediasearch exec('Py dokuvimki.search(\"media\", <f-args>)')")
+            vim.command("command! -complete=customlist,CmdModeComplete -nargs=* DWrevisions exec('Py dokuvimki.revisions(<f-args>)')")
+            vim.command("command! -complete=customlist,CmdModeComplete -nargs=? DWbacklinks exec('Py dokuvimki.backlinks(<f-args>)')")
+            vim.command("command! -nargs=? DWchanges exec('Py dokuvimki.changes(<f-args>)')")
+            vim.command("command! -nargs=0 -bang DWclose exec('Py dokuvimki.close(\"<bang>\")')")
+            vim.command("command! -nargs=0 DWdiffclose exec('Py dokuvimki.diff_close()')")
+            vim.command("command! -complete=file -bang -nargs=1 DWupload exec('Py dokuvimki.upload(<f-args>,\"<bang>\")')")
+            vim.command("command! -nargs=0 DWhelp exec('Py dokuvimki.help()')")
+            vim.command("command! -nargs=0 -bang DWquit exec('Py dokuvimki.quit(\"<bang>\")')")
 
             self.buffers = {}
             self.buffers['search']    = Buffer('search', 'nofile')
@@ -257,9 +263,9 @@ class DokuVimKi:
                         self.buffers[wp].buf[:]  = self.buffers[wp].page
 
                         vim.command('set nomodified')
-                        vim.command('autocmd! BufWriteCmd <buffer> py dokuvimki.save()')
-                        vim.command('autocmd! FileWriteCmd <buffer> py dokuvimki.save()')
-                        vim.command('autocmd! FileAppendCmd <buffer> py dokuvimki.save()')
+                        vim.command('autocmd! BufWriteCmd <buffer> Py dokuvimki.save()')
+                        vim.command('autocmd! FileWriteCmd <buffer> Py dokuvimki.save()')
+                        vim.command('autocmd! FileAppendCmd <buffer> Py dokuvimki.save()')
 
                 if not text and perm >= 4:
                     print("Creating new page: %s" % wp, file=sys.stdout)
@@ -267,9 +273,9 @@ class DokuVimKi:
                     self.needs_refresh = True
 
                     vim.command('set nomodified')
-                    vim.command('autocmd! BufWriteCmd <buffer> py dokuvimki.save()')
-                    vim.command('autocmd! FileWriteCmd <buffer> py dokuvimki.save()')
-                    vim.command('autocmd! FileAppendCmd <buffer> py dokuvimki.save()')
+                    vim.command('autocmd! BufWriteCmd <buffer> Py dokuvimki.save()')
+                    vim.command('autocmd! FileWriteCmd <buffer> Py dokuvimki.save()')
+                    vim.command('autocmd! FileAppendCmd <buffer> Py dokuvimki.save()')
         
                 self.buffer_setup()
 
@@ -485,9 +491,9 @@ class DokuVimKi:
 
             self.buffers['index'].buf[:] = index
 
-            vim.command('map <silent> <buffer> <enter> :py dokuvimki.cmd("index")<CR>')
-            vim.command('map <silent> <buffer> r :py dokuvimki.cmd("revisions")<CR>')
-            vim.command('map <silent> <buffer> b :py dokuvimki.cmd("backlinks")<CR>')
+            vim.command('map <silent> <buffer> <enter> :Py dokuvimki.cmd("index")<CR>')
+            vim.command('map <silent> <buffer> r :Py dokuvimki.cmd("revisions")<CR>')
+            vim.command('map <silent> <buffer> b :Py dokuvimki.cmd("backlinks")<CR>')
 
             vim.command('setlocal nomodifiable')
             vim.command('2')
@@ -548,7 +554,7 @@ class DokuVimKi:
                 vim.command('hi DokuVimKi_REV_TS cterm=bold ctermfg=Yellow gui=bold guifg=Yellow')
 
                 vim.command('setlocal nomodifiable')
-                vim.command('map <silent> <buffer> <enter> :py dokuvimki.rev_edit()<CR>')
+                vim.command('map <silent> <buffer> <enter> :Py dokuvimki.rev_edit()<CR>')
 
             else:
                 print('DokuVimKi Error: No changes', file=sys.stderr)
@@ -583,7 +589,7 @@ class DokuVimKi:
                 
                 self.buffers['revisions'].buf[:] = lines
                 print("loaded revisions for :%s" % wp, file=sys.stdout)
-                vim.command('map <silent> <buffer> <enter> :py dokuvimki.rev_edit()<CR>')
+                vim.command('map <silent> <buffer> <enter> :Py dokuvimki.rev_edit()<CR>')
 
                 vim.command('syn match DokuVimKi_REV_PAGE /^\(\w\|:\)*/')
                 vim.command('syn match DokuVimKi_REV_TS /\s\d*\s/')
@@ -594,7 +600,7 @@ class DokuVimKi:
                 vim.command('hi DokuVimKi_REV_CHANGE term=bold cterm=bold ctermfg=Yellow gui=bold guifg=Yellow')
 
                 vim.command('setlocal nomodifiable')
-                vim.command('map <silent> <buffer> d :py dokuvimki.cmd("diff")<CR>')
+                vim.command('map <silent> <buffer> d :Py dokuvimki.cmd("diff")<CR>')
 
             else:
                 print('DokuVimKi Error: No revisions found for page: %s' % wp, file=sys.stderr)
@@ -625,7 +631,7 @@ class DokuVimKi:
             if len(blinks) > 0:
                 for link in blinks:
                     self.buffers['backlinks'].buf[:] = map(str, blinks)
-                vim.command('map <buffer> <enter> :py dokuvimki.cmd("edit")<CR>')
+                vim.command('map <buffer> <enter> :Py dokuvimki.cmd("edit")<CR>')
             else:
                 print('DokuVimKi Error: No backlinks found for page: %s' % wp, file=sys.stderr)
         
@@ -658,7 +664,7 @@ class DokuVimKi:
 
                 if len(result) > 0:
                     self.buffers['search'].buf[:] = result
-                    vim.command('map <buffer> <enter> :py dokuvimki.cmd("edit")<CR>')
+                    vim.command('map <buffer> <enter> :Py dokuvimki.cmd("edit")<CR>')
                 else:
                     print('DokuVimKi Error: No matching pages found!', file=sys.stderr)
 
@@ -998,7 +1004,7 @@ class DokuVimKi:
         vim.command('setlocal encoding=utf-8')
         vim.command('setlocal completefunc=InsertModeComplete')
         vim.command('setlocal omnifunc=InsertModeComplete')
-        vim.command('map <buffer> <silent> <C-]> :py dokuvimki.id_lookup()<CR>')
+        vim.command('map <buffer> <silent> <C-]> :Py dokuvimki.id_lookup()<CR>')
         vim.command('imap <buffer> <silent> <C-D><C-B> ****<ESC>1hi')
         vim.command('imap <buffer> <silent> <C-D><C-I> ////<ESC>1hi')
         vim.command('imap <buffer> <silent> <C-D><C-U> ____<ESC>1hi')
@@ -1068,8 +1074,8 @@ class Buffer:
         if type == 'acwrite':
             self.diff = {}
             self.need_save = False
-            vim.command('autocmd! BufEnter <buffer> py dokuvimki.buffer_enter("' + self.name + '")')
-            vim.command('autocmd! BufLeave <buffer> py dokuvimki.buffer_leave("' + self.name + '")')
+            vim.command('autocmd! BufEnter <buffer> Py dokuvimki.buffer_enter("' + self.name + '")')
+            vim.command('autocmd! BufLeave <buffer> Py dokuvimki.buffer_leave("' + self.name + '")')
             vim.command("setlocal statusline=%{'[wp]\ " + self.name + "'}\ %r\ [%c,%l][%p]")
 
         if type == 'nowrite':
