@@ -98,6 +98,8 @@ if has('python') && version > 700
 python <<EOF
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
 __version__ = '2010-07-01';
 __author__  = 'Michael Klier <chi@chimeric.de>'
 
@@ -111,7 +113,7 @@ try:
     import dokuwikixmlrpc
     has_dokuwikixmlrpc = True
 except ImportError:
-    print >>sys.stderr, 'DokuVimKi Error: The dokuwikixmlrpc python module is missing!'
+    print('DokuVimKi Error: The dokuwikixmlrpc python module is missing!', file=sys.stderr)
     has_dokuwikixmlrpc = False
 
 vim_version = int(vim.eval('v:version'))
@@ -130,11 +132,11 @@ class DokuVimKi:
         """
 
         if sys.version_info < (2,4):
-            print >>sys.stderr, "DokuVimKi requires at least python Version 2.4 or greater!"
+            print("DokuVimKi requires at least python Version 2.4 or greater!", file=sys.stderr)
             return
 
         if not has_dokuwikixmlrpc:
-            print >>sys.stderr, "dokuwikixmlrpc python module missing!"
+            print("dokuwikixmlrpc python module missing!", file=sys.stderr)
             return
 
         if self.xmlrpc_init():
@@ -190,18 +192,18 @@ class DokuVimKi:
             self.dw_pass = vim.eval('g:DokuVimKi_PASS')
             self.dw_url  = vim.eval('g:DokuVimKi_URL')
         except vim.error as err:
-            print >>sys.stderr, "Something went wrong during initialization. Please check your configuration settings."
+            print("Something went wrong during initialization. Please check your configuration settings.", file=sys.stderr)
             return False
 
         try:
             self.xmlrpc = dokuwikixmlrpc.DokuWikiClient(self.dw_url, self.dw_user, self.dw_pass)
-            print >>sys.stdout, 'Connection to ' + vim.eval('g:DokuVimKi_URL') + ' established!'
+            print('Connection to ' + vim.eval('g:DokuVimKi_URL') + ' established!', file=sys.stdout)
             return True
         except dokuwikixmlrpc.DokuWikiXMLRPCError as err:
-            print >>sys.stderr, err
+            print(err, file=sys.stderr)
             return False
         except dokuwikixmlrpc.DokuWikiURLError as err:
-            print >>sys.stderr, err
+            print(err, file=sys.stderr)
             return False
 
 
@@ -211,7 +213,7 @@ class DokuVimKi:
         editing or switches to the correct buffer if the is open already.
         """
 
-        print >>sys.stdout, "editing pagename %s." % wp
+        print("editing pagename %s." % wp, file=sys.stdout)
         wp = ':'.join([x.strip().lower().replace(' ', '_') for x in wp.split(':')])
 
         if self.diffmode:
@@ -233,11 +235,11 @@ class DokuVimKi:
                     else:
                         text = self.xmlrpc.page(wp)
                 except dokuwikixmlrpc.DokuWikiXMLRPCError as err:
-                    print >>sys.stdout, err
+                    print(err, file=sys.stdout)
 
                 if text: 
                     if perm == 1:
-                        print >>sys.stderr, "You don't have permission to edit %s. Opening readonly!" % wp
+                        print("You don't have permission to edit %s. Opening readonly!" % wp, file=sys.stderr)
                         self.buffers[wp] = Buffer(wp, 'nowrite', True)
                         lines = text.split("\n")
                         self.buffers[wp].buf[:] = map(lambda x: x.encode('utf-8'), lines)
@@ -248,7 +250,7 @@ class DokuVimKi:
                         if not self.lock(wp):
                             return
 
-                        print >>sys.stdout, "Opening %s for editing ..." % wp
+                        print("Opening %s for editing ..." % wp, file=sys.stdout)
                         self.buffers[wp] = Buffer(wp, 'acwrite', True)
                         lines = text.split("\n")
                         self.buffers[wp].page[:] = map(lambda x: x.encode('utf-8'), lines)
@@ -260,7 +262,7 @@ class DokuVimKi:
                         vim.command('autocmd! FileAppendCmd <buffer> py dokuvimki.save()')
 
                 if not text and perm >= 4:
-                    print >>sys.stdout, "Creating new page: %s" % wp
+                    print("Creating new page: %s" % wp, file=sys.stdout)
                     self.buffers[wp]   = Buffer(wp, 'acwrite', True)
                     self.needs_refresh = True
 
@@ -272,7 +274,7 @@ class DokuVimKi:
                 self.buffer_setup()
 
             else:
-                print >>sys.stderr, "You don't have permissions to read/edit/create %s" % wp
+                print("You don't have permissions to read/edit/create %s" % wp, file=sys.stderr)
                 return
 
         else:
@@ -300,7 +302,7 @@ class DokuVimKi:
                 lines = text.split("\n")
                 self.buffers[wp].diff[rev].page[:] = map(lambda x: x.encode('utf-8'), lines)
             else:
-                print >>sys.stdout, "Error, couldn't load revision for diffing."
+                print("Error, couldn't load revision for diffing.", file=sys.stdout)
                 return
 
         self.focus(2)
@@ -342,15 +344,15 @@ class DokuVimKi:
         wp = vim.current.buffer.name.rsplit('/', 1)[1]
         try:
             if not self.buffers[wp].iswp: 
-                print >>sys.stderr, "Error: Current buffer %s is not a wiki page or not writeable!" % wp
+                print("Error: Current buffer %s is not a wiki page or not writeable!" % wp, file=sys.stderr)
             elif self.buffers[wp].type == 'nowrite':
-                print >>sys.stderr, "Error: Current buffer %s is readonly!" % wp
+                print("Error: Current buffer %s is readonly!" % wp, file=sys.stderr)
             else:
                 text = "\n".join(self.buffers[wp].buf)
                 if text and not self.ismodified(wp):
-                    print >>sys.stdout, "No unsaved changes in current buffer."
+                    print("No unsaved changes in current buffer.", file=sys.stdout)
                 elif not text and not wp in self.pages:
-                    print >>sys.stdout, "Can't save new empty page %s." % wp
+                    print("Can't save new empty page %s." % wp, file=sys.stdout)
                 else:
                     if not sum and text:
                         sum   = self.default_sum
@@ -364,22 +366,22 @@ class DokuVimKi:
                         if text:
                             vim.command('silent! buffer! ' + self.buffers[wp].num)
                             vim.command('set nomodified')
-                            print >>sys.stdout, 'Page %s written!' % wp
+                            print('Page %s written!' % wp, file=sys.stdout)
 
                             if self.needs_refresh:
                                 self.index(self.cur_ns, True)
                                 self.needs_refresh = False
                                 self.focus(2)
                         else:
-                            print >>sys.stdout, 'Page %s removed!' % wp
+                            print('Page %s removed!' % wp, file=sys.stdout)
                             self.close(False)
                             self.index(self.cur_ns, True)
                             self.focus(2)
 
                     except dokuwikixmlrpc.DokuWikiXMLRPCError as err:
-                        print >>sys.stderr, 'DokuVimKi Error: %s' % err
+                        print('DokuVimKi Error: %s' % err, file=sys.stderr)
         except KeyError as err:
-            print >>sys.stderr, "Error: Current buffer %s is not handled by DWsave!" % wp
+            print("Error: Current buffer %s is not handled by DWsave!" % wp, file=sys.stderr)
 
 
     def upload(self, file, overwrite=False):
@@ -397,14 +399,14 @@ class DokuVimKi:
                 file_id = self.cur_ns + fname
                 try:
                     self.xmlrpc.put_file(file_id, data, overwrite)
-                    print >>sys.stdout, "Uploaded %s successfully." % fname
+                    print("Uploaded %s successfully." % fname, file=sys.stdout)
                     self.refresh()
                 except dokuwikixmlrpc.DokuWikiXMLRPCError as err:
-                    print >>sys.stderr, err
+                    print(err, file=sys.stderr)
             except IOError as err:
-                print >>sys.stderr, err
+                print(err, file=sys.stderr)
         else:
-            print >>sys.stderr, '%s is not a file' % path
+            print('%s is not a file' % path, file=sys.stderr)
 
 
     def cd(self, query=''):
@@ -516,10 +518,10 @@ class DokuVimKi:
                 elif argv['type'] == 'w':
                     timestamp = int(time.time()) - (60*60*24*(int(argv['num'])*7))
                 else:
-                    print >>sys.stderr, "Wrong timeframe format %s." % timeframe
+                    print("Wrong timeframe format %s." % timeframe, file=sys.stderr)
                     return
             else:
-                print >>sys.stderr, "Wrong timeframe format %s." % timeframe
+                print("Wrong timeframe format %s." % timeframe, file=sys.stderr)
                 return
 
         try:
@@ -549,10 +551,10 @@ class DokuVimKi:
                 vim.command('map <silent> <buffer> <enter> :py dokuvimki.rev_edit()<CR>')
 
             else:
-                print >>sys.stderr, 'DokuVimKi Error: No changes'
+                print('DokuVimKi Error: No changes', file=sys.stderr)
 
         except dokuwikixmlrpc.DokuWikiXMLRPCError as err:
-            print >>sys.stderr, err
+            print(err, file=sys.stderr)
 
 
     def revisions(self, wp='', first=0):
@@ -580,7 +582,7 @@ class DokuVimKi:
                     lines.append(line)
                 
                 self.buffers['revisions'].buf[:] = lines
-                print >>sys.stdout, "loaded revisions for :%s" % wp
+                print("loaded revisions for :%s" % wp, file=sys.stdout)
                 vim.command('map <silent> <buffer> <enter> :py dokuvimki.rev_edit()<CR>')
 
                 vim.command('syn match DokuVimKi_REV_PAGE /^\(\w\|:\)*/')
@@ -595,10 +597,10 @@ class DokuVimKi:
                 vim.command('map <silent> <buffer> d :py dokuvimki.cmd("diff")<CR>')
 
             else:
-                print >>sys.stderr, 'DokuVimKi Error: No revisions found for page: %s' % wp
+                print('DokuVimKi Error: No revisions found for page: %s' % wp, file=sys.stderr)
 
         except dokuwikixmlrpc.DokuWikiXMLRPCError as err:
-            print >>sys.stderr, 'DokuVimKi XML-RPC Error: %s' % err
+            print('DokuVimKi XML-RPC Error: %s' % err, file=sys.stderr)
 
 
     def backlinks(self, wp=''):
@@ -625,12 +627,12 @@ class DokuVimKi:
                     self.buffers['backlinks'].buf[:] = map(str, blinks)
                 vim.command('map <buffer> <enter> :py dokuvimki.cmd("edit")<CR>')
             else:
-                print >>sys.stderr, 'DokuVimKi Error: No backlinks found for page: %s' % wp
+                print('DokuVimKi Error: No backlinks found for page: %s' % wp, file=sys.stderr)
         
             vim.command('setlocal nomodifiable')
 
         except dokuwikixmlrpc.DokuWikiXMLRPCError as err:
-            print >>sys.stderr, 'DokuVimKi XML-RPC Error: %s' % err
+            print('DokuVimKi XML-RPC Error: %s' % err, file=sys.stderr)
 
 
     def search(self, type='', pattern=''):
@@ -658,7 +660,7 @@ class DokuVimKi:
                     self.buffers['search'].buf[:] = result
                     vim.command('map <buffer> <enter> :py dokuvimki.cmd("edit")<CR>')
                 else:
-                    print >>sys.stderr, 'DokuVimKi Error: No matching pages found!'
+                    print('DokuVimKi Error: No matching pages found!', file=sys.stderr)
 
             elif type == 'media':
                 vim.command('silent! buffer! ' + self.buffers['media'].num)
@@ -673,7 +675,7 @@ class DokuVimKi:
                 if len(result) > 0:
                     self.buffers['media'].buf[:] = result
                 else:
-                    print >>sys.stderr, 'DokuVimKi Error: No matching media files found!'
+                    print('DokuVimKi Error: No matching media files found!', file=sys.stderr)
 
             vim.command('setlocal nomodifiable')
 
@@ -695,7 +697,7 @@ class DokuVimKi:
             buffer = vim.current.buffer.name.rsplit('/', 1)[1]
             if self.buffers[buffer].iswp: 
                 if not bang and self.ismodified(buffer):
-                    print >>sys.stderr, "Warning: %s contains unsaved changes! Use DWclose!." % buffer
+                    print("Warning: %s contains unsaved changes! Use DWclose!." % buffer, file=sys.stderr)
                     return
 
                 vim.command('bp!')
@@ -704,10 +706,10 @@ class DokuVimKi:
                     self.unlock(buffer)
                 del self.buffers[buffer]
             else:
-                print >>sys.stderr, 'You cannot close special buffer "%s"!' % buffer
+                print('You cannot close special buffer "%s"!' % buffer, file=sys.stderr)
 
         except KeyError as err:
-            print >>sys.stderr, 'You cannot use DWclose on non wiki page "%s"!' % buffer
+            print('You cannot use DWclose on non wiki page "%s"!' % buffer, file=sys.stderr)
 
 
     def quit(self, bang):
@@ -731,7 +733,7 @@ class DokuVimKi:
         if len(unsaved) == 0:
             vim.command('silent! quitall')
         else:
-            print >>sys.stderr, "Some buffers contain unsaved changes. Use DWquit! if you really want to quit."
+            print("Some buffers contain unsaved changes. Use DWquit! if you really want to quit.", file=sys.stderr)
 
 
     def help(self):
@@ -793,7 +795,7 @@ class DokuVimKi:
         self.media = []
 
         try:
-            print >>sys.stdout, "Refreshing page index!"
+            print("Refreshing page index!", file=sys.stdout)
             data = self.xmlrpc.all_pages()
 
             if data:
@@ -809,7 +811,7 @@ class DokuVimKi:
             self.pages.sort()
             vim.command('let g:pages = "' + " ".join(self.pages) + '"')
 
-            print >>sys.stdout, "Refreshing media index!"
+            print("Refreshing media index!", file=sys.stdout)
             data = self.xmlrpc.list_files(':', True)
 
             if data:
@@ -820,7 +822,7 @@ class DokuVimKi:
             vim.command('let g:media = "' + " ".join(self.media) + '"')
 
         except dokuwikixmlrpc.DokuWikiXMLRPCError as err:
-            print >>sys.stderr, "Failed to fetch page list. Please check your configuration\n%s" % err
+            print("Failed to fetch page list. Please check your configuration\n%s" % err, file=sys.stderr)
 
 
     def lock(self, wp):
@@ -835,10 +837,10 @@ class DokuVimKi:
         result = self.set_locks(locks)
 
         if locks['lock'] == [x.encode('utf-8') for x in result['locked']]:
-            print >>sys.stdout, "Locked page %s for editing." % wp
+            print("Locked page %s for editing." % wp, file=sys.stdout)
             return True
         else:
-            print >>sys.stderr, 'The page "%s" appears to be locked for editing. You have to wait until the lock expires.' % wp
+            print('The page "%s" appears to be locked for editing. You have to wait until the lock expires.' % wp, file=sys.stderr)
             return False
 
     
@@ -867,7 +869,7 @@ class DokuVimKi:
         try:
             return self.xmlrpc.set_locks(locks)
         except dokuwikixmlrpc.DokuWikiXMLRPCError as err:
-            print >>sys.stderr, err
+            print(err, file=sys.stderr)
 
 
     def id_lookup(self):
@@ -930,7 +932,7 @@ class DokuVimKi:
                     id = ns + ':' + id
 
                 # we're done, open the page for editing
-                print >>sys.stdout, id
+                print(id, file=sys.stdout)
                 self.edit(id)
 
 
@@ -950,7 +952,7 @@ class DokuVimKi:
         if line.find('..') == -1:
             if line.find('/') == -1:
                 if not line:
-                    print >>sys.stdout, "meh"
+                    print("meh", file=sys.stdout)
                 else:
                     line = self.cur_ns + line
             else:
