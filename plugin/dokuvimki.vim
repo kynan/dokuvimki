@@ -189,7 +189,7 @@ class DokuVimKi:
             self.dw_user = vim.eval('g:DokuVimKi_USER')
             self.dw_pass = vim.eval('g:DokuVimKi_PASS')
             self.dw_url  = vim.eval('g:DokuVimKi_URL')
-        except vim.error, err:
+        except vim.error as err:
             print >>sys.stderr, "Something went wrong during initialization. Please check your configuration settings."
             return False
 
@@ -197,10 +197,10 @@ class DokuVimKi:
             self.xmlrpc = dokuwikixmlrpc.DokuWikiClient(self.dw_url, self.dw_user, self.dw_pass)
             print >>sys.stdout, 'Connection to ' + vim.eval('g:DokuVimKi_URL') + ' established!'
             return True
-        except dokuwikixmlrpc.DokuWikiXMLRPCError, err:
+        except dokuwikixmlrpc.DokuWikiXMLRPCError as err:
             print >>sys.stderr, err
             return False
-        except dokuwikixmlrpc.DokuWikiURLError, err:
+        except dokuwikixmlrpc.DokuWikiURLError as err:
             print >>sys.stderr, err
             return False
 
@@ -232,7 +232,7 @@ class DokuVimKi:
                         text = self.xmlrpc.page(wp, int(rev))
                     else:
                         text = self.xmlrpc.page(wp)
-                except dokuwikixmlrpc.DokuWikiXMLRPCError, err:
+                except dokuwikixmlrpc.DokuWikiXMLRPCError as err:
                     print >>sys.stdout, err
 
                 if text: 
@@ -376,9 +376,9 @@ class DokuVimKi:
                             self.index(self.cur_ns, True)
                             self.focus(2)
 
-                    except dokuwikixmlrpc.DokuWikiXMLRPCError, err:
+                    except dokuwikixmlrpc.DokuWikiXMLRPCError as err:
                         print >>sys.stderr, 'DokuVimKi Error: %s' % err
-        except KeyError, err:
+        except KeyError as err:
             print >>sys.stderr, "Error: Current buffer %s is not handled by DWsave!" % wp
 
 
@@ -399,9 +399,9 @@ class DokuVimKi:
                     self.xmlrpc.put_file(file_id, data, overwrite)
                     print >>sys.stdout, "Uploaded %s successfully." % fname
                     self.refresh()
-                except dokuwikixmlrpc.DokuWikiXMLRPCError, err:
+                except dokuwikixmlrpc.DokuWikiXMLRPCError as err:
                     print >>sys.stderr, err
-            except IOError, err:
+            except IOError as err:
                 print >>sys.stderr, err
         else:
             print >>sys.stderr, '%s is not a file' % path
@@ -551,7 +551,7 @@ class DokuVimKi:
             else:
                 print >>sys.stderr, 'DokuVimKi Error: No changes'
 
-        except dokuwikixmlrpc.DokuWikiXMLRPCError, err:
+        except dokuwikixmlrpc.DokuWikiXMLRPCError as err:
             print >>sys.stderr, err
 
 
@@ -597,7 +597,7 @@ class DokuVimKi:
             else:
                 print >>sys.stderr, 'DokuVimKi Error: No revisions found for page: %s' % wp
 
-        except dokuwikixmlrpc.DokuWikiXMLRPCError, err:
+        except dokuwikixmlrpc.DokuWikiXMLRPCError as err:
             print >>sys.stderr, 'DokuVimKi XML-RPC Error: %s' % err
 
 
@@ -629,7 +629,7 @@ class DokuVimKi:
         
             vim.command('setlocal nomodifiable')
 
-        except dokuwikixmlrpc.DokuWikiXMLRPCError, err:
+        except dokuwikixmlrpc.DokuWikiXMLRPCError as err:
             print >>sys.stderr, 'DokuVimKi XML-RPC Error: %s' % err
 
 
@@ -706,7 +706,7 @@ class DokuVimKi:
             else:
                 print >>sys.stderr, 'You cannot close special buffer "%s"!' % buffer
 
-        except KeyError, err:
+        except KeyError as err:
             print >>sys.stderr, 'You cannot use DWclose on non wiki page "%s"!' % buffer
 
 
@@ -819,7 +819,7 @@ class DokuVimKi:
             self.media.sort()
             vim.command('let g:media = "' + " ".join(self.media) + '"')
 
-        except dokuwikixmlrpc.DokuWikiXMLRPCError, err:
+        except dokuwikixmlrpc.DokuWikiXMLRPCError as err:
             print >>sys.stderr, "Failed to fetch page list. Please check your configuration\n%s" % err
 
 
@@ -866,7 +866,7 @@ class DokuVimKi:
 
         try:
             return self.xmlrpc.set_locks(locks)
-        except dokuwikixmlrpc.DokuWikiXMLRPCError, err:
+        except dokuwikixmlrpc.DokuWikiXMLRPCError as err:
             print >>sys.stderr, err
 
 
