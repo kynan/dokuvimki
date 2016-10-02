@@ -230,7 +230,7 @@ class DokuVimKi:
         if wp.find(':') == -1:
             wp = self.cur_ns + wp
 
-        if not wp in self.buffers:
+        if wp not in self.buffers:
 
             perm = int(self.xmlrpc.acl_check(wp))
 
@@ -298,10 +298,10 @@ class DokuVimKi:
         rev  = data[2]
         date = time.strftime('%Y-%m-%d@%Hh%mm%Ss', time.localtime(float(rev)))
 
-        if not wp in self.buffers:
+        if wp not in self.buffers:
             self.edit(wp)
 
-        if not rev in self.buffers[wp].diff:
+        if rev not in self.buffers[wp].diff:
             text = self.xmlrpc.page(wp, int(rev))
             if text:
                 self.buffers[wp].diff[rev] = Buffer(wp + '_' + date, 'nofile')
@@ -357,7 +357,7 @@ class DokuVimKi:
                 text = "\n".join(self.buffers[wp].buf)
                 if text and not self.ismodified(wp):
                     print("No unsaved changes in current buffer.", file=sys.stdout)
-                elif not text and not wp in self.pages:
+                elif not text and wp not in self.pages:
                     print("Can't save new empty page %s." % wp, file=sys.stdout)
                 else:
                     if not sum and text:
@@ -809,7 +809,7 @@ class DokuVimKi:
                     page = page['id'].encode('utf-8')
                     ns   = page.rsplit(':', 1)[0] + ':'
                     self.pages.append(page)
-                    if not ns in self.pages:
+                    if ns not in self.pages:
                         self.pages.append(ns)
                         self.media.append(ns)
                     
