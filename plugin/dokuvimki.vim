@@ -230,7 +230,7 @@ class DokuVimKi:
         if wp.find(':') == -1:
             wp = self.cur_ns + wp
 
-        if not self.buffers.has_key(wp):
+        if not wp in self.buffers:
 
             perm = int(self.xmlrpc.acl_check(wp))
 
@@ -298,10 +298,10 @@ class DokuVimKi:
         rev  = data[2]
         date = time.strftime('%Y-%m-%d@%Hh%mm%Ss', time.localtime(float(rev)))
 
-        if not self.buffers.has_key(wp):
+        if not wp in self.buffers:
             self.edit(wp)
 
-        if not self.buffers[wp].diff.has_key(rev):
+        if not rev in self.buffers[wp].diff:
             text = self.xmlrpc.page(wp, int(rev))
             if text:
                 self.buffers[wp].diff[rev] = Buffer(wp + '_' + date, 'nofile')
