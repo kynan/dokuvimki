@@ -786,7 +786,7 @@ class DokuVimKi:
 
             if data:
                 for page in data:
-                    page = page['id'].encode('utf-8')
+                    page = page['id']
                     ns = page.rsplit(':', 1)[0] + ':'
                     self.pages.append(page)
                     if ns not in self.pages:
@@ -801,7 +801,7 @@ class DokuVimKi:
 
             if data:
                 for media in data:
-                    self.media.append(media['id'].encode('utf-8'))
+                    self.media.append(media['id'])
 
             self.media.sort()
             vim.command('let g:media = "' + " ".join(self.media) + '"')
