@@ -124,6 +124,13 @@ except ImportError:
 
 vim_version = int(vim.eval('v:version'))
 
+if sys.version_info < (3,):
+    def u(x):
+        return x if isinstance(x, unicode) else x.decode('utf-8')
+else:
+    def u(x):
+        return x
+
 
 class DokuVimKi:
     """
