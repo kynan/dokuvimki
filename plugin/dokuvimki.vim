@@ -752,7 +752,7 @@ class DokuVimKi:
 
         if self.buffers[buffer].need_save:
             return True
-        elif "\n".join(self.buffers[buffer].page).strip() != "\n".join(self.buffers[buffer].buf).strip():
+        elif u("\n".join(self.buffers[buffer].page).strip()) != u("\n".join(self.buffers[buffer].buf).strip()):
             return True
         else:
             return False
