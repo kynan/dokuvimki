@@ -245,8 +245,7 @@ class DokuVimKi:
                     if perm == 1:
                         print("You don't have permission to edit %s. Opening readonly!" % wp, file=sys.stderr)
                         self.buffers[wp] = Buffer(wp, 'nowrite', True)
-                        lines = text.split("\n")
-                        self.buffers[wp].buf[:] = map(lambda x: x.encode('utf-8'), lines)
+                        self.buffers[wp].buf[:] = text.split("\n")
                         vim.command('setlocal nomodifiable')
                         vim.command('setlocal readonly')
 
@@ -256,8 +255,7 @@ class DokuVimKi:
 
                         print("Opening %s for editing ..." % wp, file=sys.stdout)
                         self.buffers[wp] = Buffer(wp, 'acwrite', True)
-                        lines = text.split("\n")
-                        self.buffers[wp].page[:] = map(lambda x: x.encode('utf-8'), lines)
+                        self.buffers[wp].page[:] = text.split("\n")
                         self.buffers[wp].buf[:] = self.buffers[wp].page
 
                         vim.command('set nomodified')
@@ -302,8 +300,7 @@ class DokuVimKi:
             text = self.xmlrpc.page(wp, int(rev))
             if text:
                 self.buffers[wp].diff[rev] = Buffer(wp + '_' + date, 'nofile')
-                lines = text.split("\n")
-                self.buffers[wp].diff[rev].page[:] = map(lambda x: x.encode('utf-8'), lines)
+                self.buffers[wp].diff[rev].page[:] = text.split("\n")
             else:
                 print("Error, couldn't load revision for diffing.", file=sys.stdout)
                 return
