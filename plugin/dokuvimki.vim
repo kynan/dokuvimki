@@ -710,7 +710,7 @@ class DokuVimKi:
 
         unsaved = []
 
-        for buffer in self.buffers.keys():
+        for buffer in list(self.buffers):
             if self.buffers[buffer].iswp:
                 if not self.ismodified(buffer):
                     vim.command('silent! buffer! ' + self.buffers[buffer].num)
