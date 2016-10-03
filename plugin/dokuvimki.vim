@@ -820,7 +820,7 @@ class DokuVimKi:
 
         result = self.set_locks(locks)
 
-        if locks['lock'] == [x.encode('utf-8') for x in result['locked']]:
+        if locks['lock'] == result['locked']:
             print("Locked page %s for editing." % wp, file=sys.stdout)
             return True
         else:
@@ -838,7 +838,7 @@ class DokuVimKi:
 
         result = self.set_locks(locks)
 
-        if locks['unlock'] == [x.encode('utf-8') for x in result['unlocked']]:
+        if locks['unlock'] == result['unlocked']:
             return True
         else:
             return False
