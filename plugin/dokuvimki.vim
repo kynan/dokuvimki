@@ -526,21 +526,10 @@ class DokuVimKi:
 
         try:
             changes = self.xmlrpc.recent_changes(timestamp)
-            lines = []
             if len(changes) > 0:
-                maxlen = 0
-                for change in changes:
-                    changelen = len(change['name'])
-                    if changelen > maxlen:
-                        maxlen = changelen
-
-                for change in changes:
-                    change['name'] = change['name'] + ' ' * (maxlen - len(change['name']))
-                    line = "\t".join(map(lambda x: str(change[x]), ['name', 'lastModified', 'version', 'author']))
-                    lines.append(line)
-
-                lines.reverse()
-                self.buffers['changes'].buf[:] = lines
+                maxlen = max(len(change['name']) for change in changes)
+                fmt = '{name:' + str(maxlen) + '}\t{lastModified}\t{version}\t{author}'
+                self.buffers['changes'].buf[:] = list(reversed([fmt.format(**change) for change in changes]))
                 vim.command('syn match DokuVimKi_REV_PAGE /^\(\w\|:\)*/')
                 vim.command('syn match DokuVimKi_REV_TS /\s\d*\s/')
 
@@ -574,13 +563,9 @@ class DokuVimKi:
             vim.command('setlocal modifiable')
 
             revs = self.xmlrpc.page_versions(wp, int(first))
-            lines = []
-            if len(revs) > 0:
-                for rev in revs:
-                    line = wp + "\t" + "\t".join(map(lambda x: str(rev[x]), ['modified', 'version', 'ip', 'type', 'user', 'sum']))
-                    lines.append(line)
-
-                self.buffers['revisions'].buf[:] = lines
+            if revs:
+                self.buffers['revisions'].buf[:] = [wp + "\t" + "\t".join(str(rev[x]) for x in ['modified', 'version', 'ip', 'type', 'user', 'sum'])
+                                                    for rev in revs]
                 print("loaded revisions for :%s" % wp, file=sys.stdout)
                 vim.command('map <silent> <buffer> <enter> :Py dokuvimki.rev_edit()<CR>')
 
