@@ -188,7 +188,7 @@ BUGS                                                          *dokuvimki-bugs*
 
 Please use the official bug tracker for feature requests of bug reports:
 >
-    http://github.com/kynan/dokuvimki/issues
+    https://github.com/kynan/dokuvimki/issues
     
 
 If the bug is reproducible, then it will be of great help if a short
