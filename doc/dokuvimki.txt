@@ -24,7 +24,7 @@ UPDATES                                                    *dokuvimki-updates*
 
 The official releases can be found at:
 
-    git: http://github.com/kynan/dokuvimki
+    git: https://github.com/kynan/dokuvimki
 
 ------------------------------------------------------------------------------
 INSTALLATION                                          *dokuvimki-installation*
