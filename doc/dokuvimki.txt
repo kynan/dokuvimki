@@ -24,7 +24,7 @@ UPDATES                                                    *dokuvimki-updates*
 
 The official releases can be found at:
 
-    git: http://github.com/chimeric/dokuvimki
+    git: https://github.com/kynan/dokuvimki
 
 ------------------------------------------------------------------------------
 INSTALLATION                                          *dokuvimki-installation*
@@ -188,7 +188,7 @@ BUGS                                                          *dokuvimki-bugs*
 
 Please use the official bug tracker for feature requests of bug reports:
 >
-    http://github.com/chimeric/dokuvimki/issus
+    https://github.com/kynan/dokuvimki/issues
     
 
 If the bug is reproducible, then it will be of great help if a short
