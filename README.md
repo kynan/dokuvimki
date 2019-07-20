@@ -21,19 +21,24 @@ For `pathogen.vim`, simply run the following:
     cd ~/.vim/bundle
     git clone git://github.com/kynan/dokuvimki
 
-Alternatively, download the plugin and unpack it in `~/.vim/`.
+Alternatively, download the plugin and unpack it in your `~/.vim/` folder.
 
 vim needs to be compiled with [python
 support](http://vimdoc.sourceforge.net/htmldoc/if_pyth.html), which should be
 the case for most distributions e.g. `vim-gnome` or `vim-gtk` on Debian/Ubuntu.
 
-The [`xmlrpclib`](https://pypi.org/project/xmlrpclib/) and
-[`dokuwikixmlrpc`](https://pypi.org/project/dokuwikixmlrpc/) python modules
+The [`xmlrpclib`](https://pypi.org/project/xmlrpclib) and
+[`dokuwikixmlrpc`](https://github.com/kynan/dokuwikixmlrpc) python modules
 need to be installed. Note that vim will use the Python interpreter it was
 built with (if you haven't built vim yourself this will be your system Python)
 and you will need to install those dependencies for that interpreter. If you'd
 like to use a virtualenv for this you need a vim plugin like
 [`virtualenv.vim`](https://github.com/plytophogy/vim-virtualenv).
+
+Note that the version of `dokuwikixmlrpc` on PyPI is outdated and does not
+support Python 3. To get the up to date version, install from GitHub:
+
+    pip install git+https://github.com/kynan/dokuwikixmlrpc
 
 You'll also have to install a recent development version of
 [DokuWiki](https://dokuwiki.org) itself in order to use this plugin! For
