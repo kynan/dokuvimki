@@ -8,8 +8,10 @@ import re
 import vim
 import time
 
-__version__ = '2010-07-01'
+__version__ = '2020.5.23'
 __author__ = 'Michael Klier <chi@chimeric.de>'
+__license__ = 'MIT'
+__maintainer__ = 'Florian Rathgeber'
 
 try:
     import dokuwikixmlrpc
