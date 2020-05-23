@@ -242,7 +242,7 @@ class DokuVimKi:
         text and save.
         """
 
-        wp = vim.current.buffer.name.rsplit('/', 1)[1]
+        wp = vim.current.buffer.name.rsplit(os.sep, 1)[1]
         try:
             if not self.buffers[wp].iswp:
                 print("Error: Current buffer %s is not a wiki page or not writeable!" % wp, file=sys.stderr)
@@ -571,7 +571,7 @@ class DokuVimKi:
             return
 
         try:
-            buffer = vim.current.buffer.name.rsplit('/', 1)[1]
+            buffer = vim.current.buffer.name.rsplit(os.sep, 1)[1]
             if self.buffers[buffer].iswp:
                 if not bang and self.ismodified(buffer):
                     print("Warning: %s contains unsaved changes! Use DWclose!." % buffer, file=sys.stderr)
@@ -747,7 +747,7 @@ class DokuVimKi:
         row, col = vim.current.window.cursor
 
         # get namespace from current page
-        wp = vim.current.buffer.name.rsplit('/', 1)[1]
+        wp = vim.current.buffer.name.rsplit(os.sep, 1)[1]
         ns = wp.rsplit(':', 1)[0]
         if ns == wp:
             ns = ''
