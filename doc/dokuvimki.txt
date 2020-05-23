@@ -14,7 +14,7 @@ OVERVIEW                                                  *dokuvimki-overview*
 
 |dokuvimki-commands|            Brief description of the available commands
 
-|dokuvimki-buffer-mappings|     Description of the mappings available in the 
+|dokuvimki-buffer-mappings|     Description of the mappings available in the
                                 special buffers
 
 |dokuvimki-bugs|                Bug reports are always welcome ;-)
@@ -50,7 +50,7 @@ g:DokuVimKi_URL             The URL of the remote wiki (no trailing slash!).
 g:DokuVimKi_INDEX_WINWIDTH  The width of the index window (default 30).
 
 g:DokuVimKi_DEFAULT_SUM     Default summary used if no summary is given on
-                            save. Defaults to [xmlrpc dokuvimki edit]. 
+                            save. Defaults to [xmlrpc dokuvimki edit].
                             If you save pages using :w this is used as well
                             and will result in a minor edit.
 
@@ -59,15 +59,15 @@ COMMANDS                                                  *dokuvimki-commands*
 
 :DWedit <page>              Opens the given wiki page in the edit buffer. If
                             the page does not exist on the remote wiki it will
-                            be created once you issue :DWSave. You can use 
+                            be created once you issue :DWSave. You can use
                             <TAB> to autocomplete pages. If the page doesn't
-                            contain any ':' the page will be created in the 
+                            contain any ':' the page will be created in the
                             current namespace the index is showing.
 
 :DWcd <namespace>           Change into a given namespace.
 
 :DWsave <summary>           Save the wiki page in the edit buffer to the
-                            remote wiki. If no edit summary is given it 
+                            remote wiki. If no edit summary is given it
                             will be saved as minor edit. You can also use :w
                             but it will not allow to specify a edit summary.
 
@@ -78,10 +78,10 @@ COMMANDS                                                  *dokuvimki-commands*
                             backlinks to the page loaded in the edit buffer.
                             You can use <TAB> to autocomplete pages.
 
-:DWrevisions <page> N       Lists the available revisions of a wiki page. You 
-                            can use an offset (integer) to view earlier 
-                            revisions. The number of shown revisions depends 
-                            on the $conf['recent'] setting of the remote wiki. 
+:DWrevisions <page> N       Lists the available revisions of a wiki page. You
+                            can use an offset (integer) to view earlier
+                            revisions. The number of shown revisions depends
+                            on the $conf['recent'] setting of the remote wiki.
                             You can use <TAB> to autocomplete pages.
 
 :DWsearch <pattern>         Searches for matching pages. You can use regular
@@ -96,7 +96,7 @@ COMMANDS                                                  *dokuvimki-commands*
                                 Nd      show changes of the last N days
                                 Nw      show changes of the last N weeks
 
-:DWclose                    Closes the current edit buffer (removing edit 
+:DWclose                    Closes the current edit buffer (removing edit
 :DWclose!                   locks on the remote wiki etc.) - if the buffer
                             contains changes which haven't been synced back
                             to the remote wiki this command will issue a
@@ -117,8 +117,7 @@ COMMANDS                                                  *dokuvimki-commands*
 EDIT-MAPPINGS                                        *dokuvimki-edit-mappings*
 
 DokuVimKi mimics the functionality of DokuWikis edit toolbar to make it easier
-to insert/edit wiki syntax. Unless otherwise noted all those mappings work
-only in insert mode.
+to insert/edit wiki syntax. These mappings work only in insert mode:
 
     <C-D><C-B>  inserts bold syntax
 
@@ -140,8 +139,9 @@ only in insert mode.
 
     <C-I><C-D>  decreases the current headline level by one
 
-    e           opens a link under the current cursor position for editing
-                (this mappings only works in normal mode)
+This mapping only works in normal mode:
+
+    <C-]>       opens a link under the current cursor position for editing
 
 ------------------------------------------------------------------------------
 BUFFER-MAPPINGS                                    *dokuvimki-buffer-mappings*
@@ -189,7 +189,7 @@ BUGS                                                          *dokuvimki-bugs*
 Please use the official bug tracker for feature requests of bug reports:
 >
     https://github.com/kynan/dokuvimki/issues
-    
+
 
 If the bug is reproducible, then it will be of great help if a short
 description of the events leading to the bug are also given ;-).
