@@ -294,7 +294,7 @@ class DokuVimKi:
 
         if os.path.isfile(path):
             try:
-                fh = open(path, 'r')
+                fh = open(path, 'rb')
                 data = fh.read()
                 file_id = self.cur_ns + fname
                 try:
