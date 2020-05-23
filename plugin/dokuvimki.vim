@@ -13,7 +13,7 @@
 "
 " You should have received a copy of the GNU General Public License
 " along with this program; if not, write to the Free Software Foundation,
-" Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
+" Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 "
 " Maintainer:   Michael Klier <chi@chimeric.de>
 " URL:          http://www.chimeric.de/projects/dokuwiki/dokuvimki
@@ -37,7 +37,7 @@ if (has('python3') || has('python')) && version > 700
   endif
 
   " Custom autocompletion function for wiki pages and media files
-  " the global g:pages g:media variables are set/refreshed 
+  " the global g:pages g:media variables are set/refreshed
   " when the index is loaded
   fun! InsertModeComplete(findstart, base)
     if a:findstart
@@ -204,7 +204,7 @@ class DokuVimKi:
             self.dw_pass = vim.eval('g:DokuVimKi_PASS')
             self.dw_url = vim.eval('g:DokuVimKi_URL')
         except vim.error as err:
-            print("Something went wrong during initialization. Please check your configuration settings.", file=sys.stderr)
+            print("Error: %s. Please check your configuration settings." % err, file=sys.stderr)
             return False
 
         try:
