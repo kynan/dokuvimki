@@ -580,7 +580,8 @@ class DokuVimKi:
                     return
 
                 vim.command('bp!')
-                vim.command('bdel! ' + self.buffers[buffer].num)
+                # Ignore any failure deleting this buffer e.g. if it has been manually deleted before
+                vim.command('silent! bdel! ' + self.buffers[buffer].num)
                 if self.buffers[buffer].type == 'acwrite':
                     self.unlock(buffer)
                 del self.buffers[buffer]
