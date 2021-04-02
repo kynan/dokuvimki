@@ -277,7 +277,7 @@ class DokuVimKi:
                                 self.focus(2)
                         else:
                             print('Page %s removed!' % wp, file=sys.stdout)
-                            self.close(False)
+                            self.close(wp)
                             self.index(self.cur_ns, True)
                             self.focus(2)
 
@@ -562,9 +562,9 @@ class DokuVimKi:
         except:
             pass
 
-    def close(self, bang):
+    def close(self, buffer, bang=False):
         """
-        Closes the current buffer. Works only if the current buffer is a wiki
+        Closes the given buffer. Works only if the given buffer is a wiki
         page.  The buffer is also removed from the buffer stack.
         """
 
@@ -573,7 +573,6 @@ class DokuVimKi:
             return
 
         try:
-            buffer = vim.current.buffer.name.rsplit(os.sep, 1)[1]
             if self.buffers[buffer].iswp:
                 if not bang and self.ismodified(buffer):
                     print("Warning: %s contains unsaved changes! Use DWclose!." % buffer, file=sys.stderr)
@@ -602,10 +601,10 @@ class DokuVimKi:
             if self.buffers[buffer].iswp:
                 if not self.ismodified(buffer):
                     vim.command('silent! buffer! ' + self.buffers[buffer].num)
-                    self.close(False)
+                    self.close(buffer)
                 elif self.ismodified(buffer) and bang:
                     vim.command('silent! buffer! ' + self.buffers[buffer].num)
-                    self.close(True)
+                    self.close(buffer, bang=True)
                 else:
                     unsaved.append(buffer)
 
@@ -933,6 +932,7 @@ class Buffer:
             self.need_save = False
             vim.command('autocmd! BufEnter <buffer> Py dokuvimki.buffer_enter("' + self.name + '")')
             vim.command('autocmd! BufLeave <buffer> Py dokuvimki.buffer_leave("' + self.name + '")')
+            vim.command('autocmd! BufDelete <buffer> Py dokuvimki.close("%s")' % name)
             vim.command("setlocal statusline=%{'[wp]\ " + self.name + "'}\ %r\ [%c,%l][%p]")
 
         if type == 'nowrite':
