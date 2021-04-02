@@ -98,21 +98,19 @@ class DokuVimKi:
         """
 
         try:
-            self.dw_user = vim.eval('g:DokuVimKi_USER')
-            self.dw_pass = vim.eval('g:DokuVimKi_PASS')
-            self.dw_url = vim.eval('g:DokuVimKi_URL')
+            dw_user = vim.eval('g:DokuVimKi_USER')
+            dw_pass = vim.eval('g:DokuVimKi_PASS')
+            dw_url = vim.eval('g:DokuVimKi_URL')
         except vim.error as err:
             print("Error: %s. Please check your configuration settings." % err, file=sys.stderr)
             return False
 
         try:
-            self.xmlrpc = dokuwikixmlrpc.DokuWikiClient(self.dw_url, self.dw_user, self.dw_pass)
-            print('Connection to ' + vim.eval('g:DokuVimKi_URL') + ' established!', file=sys.stdout)
+            self.xmlrpc = dokuwikixmlrpc.DokuWikiClient(dw_url, dw_user, dw_pass)
+            dw_version = self.xmlrpc.dokuwiki_version
+            print('Connection to %s established (DokuWiki version: %s)' % (dw_url, dw_version), file=sys.stdout)
             return True
-        except dokuwikixmlrpc.DokuWikiXMLRPCError as err:
-            print(err, file=sys.stderr)
-            return False
-        except dokuwikixmlrpc.DokuWikiURLError as err:
+        except dokuwikixmlrpc.DokuWikiError as err:
             print(err, file=sys.stderr)
             return False
 
