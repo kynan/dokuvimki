@@ -80,6 +80,10 @@ let g:DokuVimKi_PASS = 'password'
 " url of the remote wiki (without trailing '/')
 let g:DokuVimKi_URL  = 'https://yourwikidomain.org'
 
+" use HTTP basic auth (optional, defaults to off)
+" setting this to any value other than empty string enables the setting
+let g:DokuVimKi_HTTP_BASIC_AUTH = 1
+
 " width of the index window (optional, defaults to 30)
 let g:DokuVimKi_INDEX_WINWIDTH = 40
 

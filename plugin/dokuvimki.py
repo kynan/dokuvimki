@@ -101,12 +101,15 @@ class DokuVimKi:
             dw_user = vim.eval('g:DokuVimKi_USER')
             dw_pass = vim.eval('g:DokuVimKi_PASS')
             dw_url = vim.eval('g:DokuVimKi_URL')
+            http_basic_auth = bool(vim.eval('g:DokuVimKi_HTTP_BASIC_AUTH'))
         except vim.error as err:
             print("Error: %s. Please check your configuration settings." % err, file=sys.stderr)
             return False
 
         try:
-            self.xmlrpc = dokuwikixmlrpc.DokuWikiClient(dw_url, dw_user, dw_pass)
+            if http_basic_auth:
+                print('Using HTTP basic authentication')
+            self.xmlrpc = dokuwikixmlrpc.DokuWikiClient(dw_url, dw_user, dw_pass, http_basic_auth=http_basic_auth)
             dw_version = self.xmlrpc.dokuwiki_version
             print('Connection to %s established (DokuWiki version: %s)' % (dw_url, dw_version), file=sys.stdout)
             return True

@@ -44,6 +44,10 @@ if (has('python3') || has('python')) && version > 700
     let g:DokuVimKi_DEFAULT_SUM = '[xmlrpc dokuvimki edit]'
   endif
 
+  if !exists('g:DokuVimKi_HTTP_BASIC_AUTH')
+    let g:DokuVimKi_HTTP_BASIC_AUTH=''
+  endif
+
   " Custom autocompletion function for wiki pages and media files
   " the global g:pages g:media variables are set/refreshed
   " when the index is loaded
