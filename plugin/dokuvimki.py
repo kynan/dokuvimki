@@ -355,7 +355,7 @@ class DokuVimKi:
         if self.pages:
             for page in self.pages:
                 if not query:
-                    if page.find(':', 0) == -1:
+                    if ':' not in page:
                         pages.append(page)
                     else:
                         ns = page.split(':', 1)[0] + '/'
@@ -675,8 +675,11 @@ class DokuVimKi:
             if data:
                 for page in data:
                     page = page['id']
-                    ns = page.rsplit(':', 1)[0] + ':'
                     self.pages.append(page)
+                    # Add the page's namespace if not the root namespace
+                    if ':' not in page:
+                        continue
+                    ns = page.rsplit(':', 1)[0] + ':'
                     if ns not in self.pages:
                         self.pages.append(ns)
                         self.media.append(ns)
