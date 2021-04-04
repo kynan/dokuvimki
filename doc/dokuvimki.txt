@@ -1,8 +1,8 @@
-*dokuvimki*   Plugin for editing DokuWiki pages via XML-RPC for Vim > 6.0
-                          For Vim > 7.0
+*dokuvimki*   Plugin for editing DokuWiki pages via XML-RPC for Vim > 7.0
 
-                        By Michael Klier
-                        <chi@chimeric.de>
+                    By Michael Klier <chi@chimeric.de>
+        and Florian Rathgeber <florian.rathgeber+github@gmail.com>
+
                                                             *dokuvimki-plugin*
 
 ------------------------------------------------------------------------------
@@ -29,33 +29,81 @@ The official releases can be found at:
 ------------------------------------------------------------------------------
 INSTALLATION                                          *dokuvimki-installation*
 
-Just unpack the tarball in your ~/.vim/ directory. Then edit your .vimrc and
-add your settings (see CONFIGURATION). You'll also need to install the python
-xmlrpclib module and the dokuwikixmlrpc module in order to use this plugin!
-For details about installing those please refer to the documentation specific
-for your OS.
+The recommended way to install DokuVimKi is via a Vim plugin manager like
+`vim-plug` (https://github.com/junegunn/vim-plug) or `pathogen.vim`
+(https://github.com/tpope/vim-pathogen).
+
+For `vim-plug`, add the following to the vim-plug section of your `~/.vimrc`,
+which enables the DokuVimKi plugin only when first connecting to a DokuWiki:
+
+    Plug 'kynan/dokuvimki', {'on': 'DokuVimKi'}
+
+For `pathogen.vim`, simply run the following:
+
+    cd ~/.vim/bundle
+    git clone git://github.com/kynan/dokuvimki
+
+Alternatively, download the plugin and unpack it in your `~/.vim/` folder.
+
+vim needs to be compiled with Python support
+(http://vimdoc.sourceforge.net/htmldoc/if_pyth.html), which should be the case
+for most distributions e.g. `vim-gnome` or `vim-gtk` on Debian/Ubuntu.
+
+The `dokuwikixmlrpc` (https://pypi.org/project/dokuwikixmlrpc) Python module
+needs to be installed. Install it with:
+
+    pip install dokuwikixmlrpc
+
+Note that Vim will use the Python interpreter it was built with (if you have
+not built Vim yourself this will be your system Python) and you will need to
+install it for that interpreter. To use a virtualenv you need a Vim plugin
+like `virtualenv.vim` (https://github.com/plytophogy/vim-virtualenv).
+
+You'll also have to install a recent development version of DokuWiki
+(https://dokuwiki.org) itself in order to use this plugin! For details on how
+to setup XMLRPC for DokuWiki please refer to https://dokuwiki.org/devel:xmlrpc.
 
 ------------------------------------------------------------------------------
 CONFIGURATION                                        *dokuvimki-configuration*
 
-The following variables have to be present in your ~/.vimrc in order to get
+The following variables have to be present in your `~/.vimrc` in order to get
 DokuVimKi working.
 
-g:DokuVimKi_USER            The username used to login into the remote wiki.
+g:DokuVimKi_USER             The username used to login into the remote wiki.
 
-g:DokuVimKi_PASS            The password used to login into the remote wiki.
+g:DokuVimKi_PASS             The password used to login into the remote wiki.
 
-g:DokuVimKi_URL             The URL of the remote wiki (no trailing slash!).
+g:DokuVimKi_URL              The URL of the remote wiki (no trailing slash!).
 
-g:DokuVimKi_INDEX_WINWIDTH  The width of the index window (default 30).
+The following variables are optional and have a default:
 
-g:DokuVimKi_DEFAULT_SUM     Default summary used if no summary is given on
-                            save. Defaults to [xmlrpc dokuvimki edit].
-                            If you save pages using :w this is used as well
-                            and will result in a minor edit.
+g:DokuVimKi_HTTP_BASIC_AUTH  Use HTTP basic auth (default off). Set this to
+                             anything but the empty string to enable.
+
+g:DokuVimKi_INDEX_WINWIDTH   The width of the index window (default 30).
+
+g:DokuVimKi_DEFAULT_SUM      Default summary used if no summary is given on
+                             save. Defaults to [xmlrpc dokuvimki edit].
+                             If you save pages using :w this is used as well
+                             and will result in a minor edit.
+
+A good idea is to outsource your DokuVimKi configuration. To do so, store your
+settings in a seperate file like `~/.vim/dokuvimkirc`. You can increase
+security be setting the file permission properly:
+
+    chmod 600 ~/.vim/dokuvimkirc
+
+To include this file in your `~/.vimrc` use following code:
+
+    " Include DokuVimKi Configuration
+    if filereadable("~/.vim/dokuvimkirc")
+        source ~/.vim/dokuvimkirc
+    endif
 
 ------------------------------------------------------------------------------
 COMMANDS                                                  *dokuvimki-commands*
+
+:DokuVimKi                  Launches DokuVimKi with the options from above.
 
 :DWedit <page>              Opens the given wiki page in the edit buffer. If
                             the page does not exist on the remote wiki it will
