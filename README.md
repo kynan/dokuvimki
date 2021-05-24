@@ -96,6 +96,50 @@ Once you are set and done you can launch DokuVimKi:
 :DokuVimKi
 ```
 
+# Highlight groups
+
+The DokuVimKi syntax highligher uses the following highlight groups, which
+can be customized:
+
+* DokuBlockColor
+* DokuBold
+* DokuCode
+* DokuCodeMatch
+* DokuDel
+* DokuFile
+* DokuFileMatch
+* DokuFootnoteMatch
+* DokuFormatColor
+* DokuHeadline
+* DokuImageMode
+* DokuItalic
+* DokuLink
+* DokuLinkExternal
+* DokuLinkInterwiki
+* DokuLinkMail
+* DokuLinkTitle
+* DokuList
+* DokuMedia
+* DokuMonospaced
+* DokuNewLine
+* DokuNoWiki
+* DokuNoWiki
+* DokuQuote
+* DokuRule
+* DokuSmileys
+* DokuSub
+* DokuSup
+* DokuTableTD
+* DokuTableTH
+* DokuUnderlined
+
+To override a highlight group, add the following to your `vimrc`:
+```
+hi <group name> <key>=<val> [<key>=<val> ...]
+```
+
+See `:help highlight` for further details.
+
 # Commands
 
 For a detailed list of available commands please consult the dokuvimki help:
