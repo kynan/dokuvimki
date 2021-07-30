@@ -7,6 +7,7 @@ import os
 import re
 import vim
 import time
+import subprocess
 
 __version__ = '2021.4.4'
 __author__ = 'Michael Klier <chi@chimeric.de>'
@@ -99,17 +100,33 @@ class DokuVimKi:
 
         try:
             dw_user = vim.eval('g:DokuVimKi_USER')
-            dw_pass = vim.eval('g:DokuVimKi_PASS')
+
+            if vim.eval('exists(\'g:DokuVimKi_PASS\')') != "0":
+                dw_pass = vim.eval('g:DokuVimKi_PASS')
+
+            if vim.eval('exists(\'g:DokuVimKi_PASS_EVAL\')') != "0":
+                dw_pass_eval = vim.eval('g:DokuVimKi_PASS_EVAL')
+
             dw_url = vim.eval('g:DokuVimKi_URL')
             http_basic_auth = bool(vim.eval('g:DokuVimKi_HTTP_BASIC_AUTH'))
         except vim.error as err:
             print("Error: %s. Please check your configuration settings." % err, file=sys.stderr)
             return False
 
+        if 'dw_pass' not in locals() and 'dw_pass_eval' not in locals():
+#           print("Error: Please either define the DokuVimKi_PASS or DokuVimKi_PASS_EVAL", file=sys.stderr)
+            return False
+
         try:
+            if 'dw_pass_eval' in locals():
+                passw = subprocess.run(dw_pass_eval.split(" "), stdout=subprocess.PIPE).stdout[-1]
+                passw = ''.join(chr(x) for x in passw)
+            else:
+                passw = dw_pass
+
             if http_basic_auth:
                 print('Using HTTP basic authentication')
-            self.xmlrpc = dokuwikixmlrpc.DokuWikiClient(dw_url, dw_user, dw_pass, http_basic_auth=http_basic_auth)
+            self.xmlrpc = dokuwikixmlrpc.DokuWikiClient(dw_url, dw_user, passw, http_basic_auth=http_basic_auth)
             dw_version = self.xmlrpc.dokuwiki_version
             print('Connection to %s established (DokuWiki version: %s)' % (dw_url, dw_version), file=sys.stdout)
             return True
