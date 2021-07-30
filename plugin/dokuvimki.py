@@ -114,12 +114,12 @@ class DokuVimKi:
             return False
 
         if 'dw_pass' not in locals() and 'dw_pass_eval' not in locals():
-#           print("Error: Please either define the DokuVimKi_PASS or DokuVimKi_PASS_EVAL", file=sys.stderr)
+            print("Error: Please either define the DokuVimKi_PASS or DokuVimKi_PASS_EVAL", file=sys.stderr)
             return False
 
         try:
             if 'dw_pass_eval' in locals():
-                passw = subprocess.run(dw_pass_eval.split(" "), stdout=subprocess.PIPE).stdout[-1]
+                passw = subprocess.run(dw_pass_eval.split(" "), stdout=subprocess.PIPE).stdout
                 passw = ''.join(chr(x) for x in passw)
             else:
                 passw = dw_pass
