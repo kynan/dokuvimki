@@ -73,6 +73,9 @@ g:DokuVimKi_USER             The username used to login into the remote wiki.
 
 g:DokuVimKi_PASS             The password used to login into the remote wiki.
 
+g:DokuVimKi_PASS_EVAL        Call an external program to get the password.
+                             E.g. GNU pass. 
+
 g:DokuVimKi_URL              The URL of the remote wiki (no trailing slash!).
 
 The following variables are optional and have a default:
