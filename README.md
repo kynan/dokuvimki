@@ -23,6 +23,14 @@ For `pathogen.vim`, simply run the following:
 
 Alternatively, download the plugin and unpack it in your `~/.vim/` folder.
 
+Note that if you have any other manually installed plugins, you need to merge
+the DokuVimKi documentation tags into your existing `doc/tags` file in your
+`~/.vim` directory, e.g. by running
+
+    cat dokuvimki/doc/tags >> .vim/doc/tags
+
+# Prerequisites
+
 vim needs to be compiled with [python
 support](http://vimdoc.sourceforge.net/htmldoc/if_pyth.html), which should be
 the case for most distributions e.g. `vim-gnome` or `vim-gtk` on Debian/Ubuntu.
