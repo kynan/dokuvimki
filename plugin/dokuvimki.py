@@ -398,6 +398,7 @@ class DokuVimKi:
             vim.command('map <silent> <buffer> <enter> :Py dokuvimki.cmd("index")<CR>')
             vim.command('map <silent> <buffer> r :Py dokuvimki.cmd("revisions")<CR>')
             vim.command('map <silent> <buffer> b :Py dokuvimki.cmd("backlinks")<CR>')
+            vim.command('map <silent> <buffer> R :Py dokuvimki.index("", True)<CR>')
 
             vim.command('setlocal nomodifiable')
             vim.command('2')
