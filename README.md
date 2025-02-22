@@ -1,11 +1,11 @@
-# Description
+# DokuVimKi
 
 DokuVimKi is a [Vim](https://www.vim.org/) plugin which allows you to edit
 [DokuWiki](https://dokuwiki.org) pages via DokuWikis
 [XML-RPC](https://dokuwiki.org/devel:xmlrpc) interface. It also does syntax
 highlighting for DokuWiki syntax.
 
-# Installation
+## Installation
 
 The recommended way to install DokuVimKi is via a Vim plugin manager like
 [`vim-plug`](https://github.com/junegunn/vim-plug) or
@@ -14,12 +14,16 @@ The recommended way to install DokuVimKi is via a Vim plugin manager like
 For `vim-plug`, add the following to the vim-plug section of your `~/.vimrc`,
 which enables the DokuVimKi plugin only when first connecting to a DokuWiki:
 
-    Plug 'kynan/dokuvimki', {'on': 'DokuVimKi'}
+```vim
+Plug 'kynan/dokuvimki', {'on': 'DokuVimKi'}
+```
 
 For `pathogen.vim`, simply run the following:
 
-    cd ~/.vim/bundle
-    git clone git://github.com/kynan/dokuvimki
+```bash
+cd ~/.vim/bundle
+git clone git://github.com/kynan/dokuvimki
+```
 
 Alternatively, download the plugin and unpack it in your `~/.vim/` folder.
 
@@ -27,9 +31,11 @@ Note that if you have any other manually installed plugins, you need to merge
 the DokuVimKi documentation tags into your existing `doc/tags` file in your
 `~/.vim` directory, e.g. by running
 
-    cat dokuvimki/doc/tags >> .vim/doc/tags
+```bash
+cat dokuvimki/doc/tags >> .vim/doc/tags
+```
 
-# Prerequisites
+## Prerequisites
 
 vim needs to be compiled with [python
 support](http://vimdoc.sourceforge.net/htmldoc/if_pyth.html), which should be
@@ -38,7 +44,9 @@ the case for most distributions e.g. `vim-gnome` or `vim-gtk` on Debian/Ubuntu.
 The [`dokuwikixmlrpc`](https://pypi.org/project/dokuwikixmlrpc) python module
 needs to be installed. Install it with:
 
-    pip install dokuwikixmlrpc
+```bash
+pip install dokuwikixmlrpc
+```
 
 Note that vim will use the Python interpreter it was built with (if you haven't
 built vim yourself this will be your system Python) and you will need to install
@@ -55,7 +63,7 @@ syntax=dokuwiki` when editing pages of a local wiki just put this in your
 `~/.vimrc` to make VIM auto-detect DokuWiki files (this is not required for
 editing remote wikis via `DWedit`):
 
-```
+```vim
 " looks for DokuWiki headlines in the first 20 lines
 " of the current buffer
 fun IsDokuWiki()
@@ -73,12 +81,12 @@ autocmd BufWinEnter *.txt call IsDokuWiki()
 syntax on
 ```
 
-# Configuration
+## Configuration
 
 To configure the plugin just add the following to your `~/.vimrc` and change
 the values to your needs.
 
-```
+```vim
 " user name with which you want to login at the remote wiki
 let g:DokuVimKi_USER = 'username'
 
@@ -100,11 +108,12 @@ let g:DokuVimKi_DEFAULT_SUM = 'fancy default summary'
 ```
 
 Once you are set and done you can launch DokuVimKi:
-```
+
+```vim
 :DokuVimKi
 ```
 
-# Highlight groups
+## Highlight groups
 
 The DokuVimKi syntax highligher uses the following highlight groups, which
 can be customized:
@@ -142,61 +151,68 @@ can be customized:
 * DokuUnderlined
 
 To override a highlight group, add the following to your `vimrc`:
-```
+
+```vim
 hi <group name> <key>=<val> [<key>=<val> ...]
 ```
 
 See `:help highlight` for further details.
 
-# Commands
+## Commands
 
 For a detailed list of available commands please consult the dokuvimki help:
-```
+
+```vim
 :help dokuvimki-commands
 ```
 
-# Tips
+## Tips
 
-## Shell aliases
+### Shell aliases
 
 To speed up the editing you could add some aliases to your `$SHELLrc`:
-```
+
+```bash
 alias vidoku='viDokuVimKi() { vim +DokuVimKi +"DWedit $1" }; viDokuVimKi'
 alias gvidoku='gviDokuVimKi() { gvim +DokuVimKi +"DWedit $1" }; gviDokuVimKi'
 ```
 
 Usage example:
-```
+
+```bash
 vidoku playground:DokuVimKi
 ```
 
 This will create a DokuVimKi document within the playground namespace.
 
-## Outsource DokuVimKi Configuration
+### Outsource DokuVimKi Configuration
 
 A good idea is to outsource your DokuVimKi configuration. To do so, store your
 settings in a seperate file like `~/.vim/dokuvimkirc`. You can increase
 security be setting the file permission properly
-```
+
+```bash
 chmod 600 ~/.vim/dokuvimkirc
 ```
 
 To include this file in your `~/.vimrc` use following code:
-```
+
+```vim
 " Include DokuVimKi Configuration
 if filereadable($HOME."/.vim/dokuvimkirc")
   source $HOME/.vim/dokuvimkirc
 endif
 ```
 
-## Create separate aliases for different dokuwikis
+### Create separate aliases for different dokuwikis
 
 One way of keeping your `.vimrc` lean and mean is to avoid loading dokuvimki
 specific configuration file unless you want to edit the wiki, while retaining
 all your other `.vimrc` magic. To do this simply create a separate
 configuration directory called `~/.dokuwiki` which should contain
 `mywiki.vim`:
-```
+
+```vim
 source ~/.dokuwiki/macros_dokuvimki.vim
 let g:DokuVimKi_USER = 'mywikiuser'
 let g:DokuVimKi_PASS = 'mywikipassword'
@@ -207,7 +223,8 @@ source ~/.dokuwiki/dokuvimki.vim
 The last bit displays the list of wiki pages by default. Then you are free to
 define a custom `macros_dokuvimki.vim` that applies to all your dokuwiki vim
 bindings:
-```
+
+```vim
 " ensures you retain your normal .vimrc magic
 source ~/.vimrc
 " remap save commands for convenience
@@ -233,16 +250,18 @@ autocmd BufWinEnter *.txt call IsDokuWiki()
 "highlight CursorLine guibg=lightgreen cterm=bold ctermbg=17
 ```
 
-## Invoking dokuvimki via shell alias
+### Invoking dokuvimki via shell alias
 
 Set a distinct alias in your bash shell (usually your `~/.bashrc` file) to
 edit *mywiki* using dokuvimki:
-```
+
+```bash
 alias vidmywiki='vi -u ~/.dokuwiki/mywiki.vim
 ```
 
 Now all you need to do on your bash shell prompt is issue:
-```
+
+```bash
 vidmywiki
 ```
 
@@ -252,7 +271,7 @@ all your dokuwikis. All you have to do is copy the contents of `mywiki.vim` to
 `mywiki2.vim`, edit the credentials and create a matching new alias for
 `mywiki2.vim` invocation.
 
-# Changelog
+## Changelog
 
 * [fixed whitespace check](http://github.com/chimeric/dokuvimki/commit/f368b9c3ba506b128efddaecefa94d7cd3008a5c)
 * [disable DokuVimKi command after initialization](http://github.com/chimeric/dokuvimki/commit/6f5413746aef603a088a9ef457d7ca79196c5619)
