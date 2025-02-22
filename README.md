@@ -5,6 +5,9 @@ DokuVimKi is a [Vim](https://www.vim.org/) plugin which allows you to edit
 [XML-RPC](https://dokuwiki.org/devel:xmlrpc) interface. It also does syntax
 highlighting for DokuWiki syntax.
 
+> [!TIP]
+> Using Neovim? Check out [DokuVimNG](https://github.com/mfulz/DokuVimNG)!
+
 ## Installation
 
 The recommended way to install DokuVimKi is via a Vim plugin manager like
