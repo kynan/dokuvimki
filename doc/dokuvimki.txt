@@ -83,6 +83,10 @@ The following variables are optional and have a default:
 g:DokuVimKi_HTTP_BASIC_AUTH  Use HTTP basic auth (default off). Set this to
                              anything but the empty string to enable.
 
+g:DokuVimKi_IMG_SUB_NS       The default namespace where an image should be
+                             uploaded when pasting from the clipboard (default
+                             images).
+
 g:DokuVimKi_INDEX_WINWIDTH   The width of the index window (default 30).
 
 g:DokuVimKi_DEFAULT_SUM      Default summary used if no summary is given on
@@ -158,6 +162,12 @@ COMMANDS                                                  *dokuvimki-commands*
 
 :DWupload <file>            Allows to upload a file in the current namespace.
 :DWupload! <file>
+
+:DWpasteimage               Upload an image from the clipboard to the remote
+                            wiki and paste the media link into the buffer.
+
+:DWpasteimageAfer           The same as DWpasteimage but paste the link after
+                            the cursor.
 
 :DWquit                     Quits the current session and quits vim. This will
 :DWquit!                    fail if there are unsaved changes.

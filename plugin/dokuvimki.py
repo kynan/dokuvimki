@@ -9,6 +9,11 @@ import vim
 import time
 import subprocess
 
+from PIL import ImageGrab
+from tempfile import TemporaryDirectory
+
+from os import path
+
 __version__ = '2021.4.4'
 __author__ = 'Michael Klier <chi@chimeric.de>'
 __license__ = 'MIT'
@@ -64,6 +69,8 @@ class DokuVimKi:
             vim.command("command! -nargs=0 -bang DWclose exec('Py dokuvimki.close(\"<bang>\")')")
             vim.command("command! -nargs=0 DWdiffclose exec('Py dokuvimki.diff_close()')")
             vim.command("command! -complete=file -bang -nargs=1 DWupload exec('Py dokuvimki.upload(<f-args>,\"<bang>\")')")
+            vim.command("command! -nargs=0 DWpasteimage exec('Py dokuvimki.paste_image(0)')")
+            vim.command("command! -nargs=0 DWpasteimageAfter exec('Py dokuvimki.paste_image(1)')")
             vim.command("command! -nargs=0 DWhelp exec('Py dokuvimki.help()')")
             vim.command("command! -nargs=0 -bang DWquit exec('Py dokuvimki.quit(\"<bang>\")')")
 
@@ -83,6 +90,8 @@ class DokuVimKi:
             self.pages = []
 
             self.default_sum = vim.eval('g:DokuVimKi_DEFAULT_SUM')
+
+            self.img_sub_ns = vim.eval("g:DokuVimKi_IMG_SUB_NS")
 
             self.index_winwith = vim.eval('g:DokuVimKi_INDEX_WINWIDTH')
             self.index(self.cur_ns, True)
@@ -320,6 +329,44 @@ class DokuVimKi:
                 print(err, file=sys.stderr)
         else:
             print('%s is not a file' % path, file=sys.stderr)
+
+    def paste_image(self, after):
+        """
+        Uploads an image from the clipboard to the remote wiki
+        and paste the media link into the buffer.
+        """
+        img = ImageGrab.grabclipboard()
+        if img is None:
+            return
+
+        with TemporaryDirectory() as tmpdir:
+            img_name = vim.exec_lua("return vim.fn.input('File Name? ', '')")
+            img_name = path.basename(img_name)
+            if img_name == "":
+                timestamp = int(time.time())
+                img_name = f"image_{timestamp}"
+
+            img_path = path.abspath(path.join(tmpdir, f"{img_name}.png"))
+            img.save(img_path, "PNG")
+
+            img_ns = self.cur_ns
+            if self.img_sub_ns:
+                img_ns = f"{img_ns}{self.img_sub_ns}:"
+
+            old_ns = self.cur_ns
+            self.cur_ns = img_ns
+            self.upload(img_path, True)
+            self.cur_ns = old_ns
+
+            img_url = f"{img_ns}{img_name}.png"
+            pattern = "{{" + img_url + "}}"
+            if vim.eval("mode()") in ["v", "V"]:
+                vim.command(f"normal! c{pattern}")
+            else:
+                if after:
+                    vim.command(f"normal! a{pattern}")
+                else:
+                    vim.command(f"normal! i{pattern}")
 
     def cd(self, query=''):
         """
