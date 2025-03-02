@@ -9,7 +9,6 @@ import vim
 import time
 import subprocess
 
-from PIL import ImageGrab
 from tempfile import TemporaryDirectory
 
 from os import path
@@ -25,6 +24,13 @@ try:
 except ImportError:
     print('DokuVimKi Error: The dokuwikixmlrpc python module is missing!', file=sys.stderr)
     has_dokuwikixmlrpc = False
+
+try:
+    from PIL import ImageGrab
+    has_pil = True
+except ImportError:
+    has_pil = False
+
 
 vim_version = int(vim.eval('v:version'))
 
@@ -335,6 +341,10 @@ class DokuVimKi:
         Uploads an image from the clipboard to the remote wiki
         and paste the media link into the buffer.
         """
+        if not has_pil:
+            print('DokuVimKi Error: The PIL python module is missing!', file=sys.stderr)
+            return
+
         img = ImageGrab.grabclipboard()
         if img is None:
             return
